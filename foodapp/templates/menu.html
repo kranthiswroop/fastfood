@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center mb-4">Our Menu</h2>
+
+<!-- Search and Filter Form -->
+<form method="get" class="row mb-4">
+  <div class="col-md-4">
+    <input type="text" name="search" placeholder="Search food..." class="form-control" value="{{ request.GET.search }}">
+  </div>
+  <div class="col-md-4">
+    <select name="category" class="form-select">
+      <option value="">All Categories</option>
+      <option value="Burgers" {% if request.GET.category == "Burgers" %}selected{% endif %}>Burgers</option>
+      <option value="Pizzas" {% if request.GET.category == "Pizzas" %}selected{% endif %}>Pizzas</option>
+      <option value="Drinks" {% if request.GET.category == "Drinks" %}selected{% endif %}>Drinks</option>
+      <option value="Desserts" {% if request.GET.category == "Desserts" %}selected{% endif %}>Desserts</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-primary">Filter</button>
+  </div>
+</form>
+
+<!-- Menu Items -->
+<div class="container">
+  <div class="row">
+    {% for item in menu_items %}
+      <div class="col-md-4 col-sm-6 col-12">
+        <div class="card">
+          <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text">₹{{ item.price }}</p>
+            <a href="{% url 'add_to_cart' item.id %}" class="btn btn-primary">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

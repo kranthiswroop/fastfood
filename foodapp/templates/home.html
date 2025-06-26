@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="text-center p-5">
+    <h1>Welcome to FastFood!</h1>
+    <p class="lead">Order your favorite meals with just a few clicks.</p>
+    <a href="{% url 'menu' %}" class="btn btn-primary">View Menu</a>
+</div>
+{% endblock %}

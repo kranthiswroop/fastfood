@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="container mt-5">
+  <h2>Checkout</h2>
+  <p>Total Amount: ₹{{ total }}</p>
+
+  <form id="payment-form">
+    <div id="card-element" class="my-3"></div>
+    <button id="submit" class="btn btn-primary">Pay Now</button>
+    <div id="error-message" style="color: red;"></div>
+  </form>
+</div>
+
+<script>
+  const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+  const elements = stripe.elements();
+  const card = elements.create("card");
+  card.mount("#card-element");
+
+  const form = document.getElementById("payment-form");
+  const errorMsg = document.getElementById("error-message");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(
+      "{{ client_secret }}", {
+        payment_method: {
+          card: card
+        }
+      }
+    );
+
+    if (error) {
+      errorMsg.textContent = error.message;
+    } else {
+      window.location.href = "{% url 'place_order' %}";
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+web: gunicorn fastfood.fastfood.wsgi:application --env DJANGO_SETTINGS_MODULE=fastfood.fastfood.settingss

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FastFood</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'foodapp/css/styles.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">FastFood</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'menu' %}">Menu</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" href="{% url 'cart' %}">Cart</a></li> -->
+
+            <!-- Add this in your navbar or wherever you want the cart icon -->
+<div class="navbar-nav ml-auto">
+  <a href="{% url 'cart' %}" class="nav-link">
+    <i class="fa fa-shopping-cart"></i> Cart 
+    {% with cart=request.session.cart %}
+      {% if cart %}
+        <span class="badge badge-danger">{{ cart|length }}</span>
+      {% else %}
+        <span class="badge badge-danger">0</span>
+      {% endif %}
+    {% endwith %}
+  </a>
+</div>
+            <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+            {% if user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="#">{{ user.username }}</a></li>
+               
+              <li>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-link nav-link" style="display:inline;">Logout</button>
+                </form>
+              </li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle-btn" class="btn btn-info">Chat</button>
+
+    <!-- Chatbot Box -->
+    <div id="chatbot-box">
+      <div id="chatbot-header">FastFood Assistant</div>
+      <div id="chatbot-messages"></div>
+      <div id="chatbot-input">
+        <input type="text" id="chat-input" placeholder="Ask something..." />
+       
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <script src="{% static 'foodapp/js/chatbot.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
